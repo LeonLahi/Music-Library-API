@@ -20,8 +20,8 @@ export interface Track {
 export interface Playlist {
     id: number
     name: string
-    description: string | null
-    coverArtUrl: string | null
+    description?: string | null
+    coverArtUrl?: string | null
     isDefault: boolean
     type: 'Album' | 'Mix' | 'Playlist' | 'Folder'
     createdAt: string
