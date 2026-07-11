@@ -85,14 +85,15 @@ export default function PlaylistTracksPage() {
                 <span className="w-8 text-center">#</span>
                 <span className="flex-1 pl-4">Title</span>
                 <span className="hidden sm:block w-48 pl-2">Artist</span>
+                <span className="hidden sm:block w-48 pl-2">Added</span>
                 <span className="w-12 text-right"><Clock className="w-4 h-4 ml-auto" /></span>
             </div>
 
             {/* Track list */}
             <div className="space-y-1">
-                {playlist.tracks.map((track, index) => (
+                {playlist.tracks.map((pt, index) => (
                     <div 
-                        key={track.id} 
+                        key={pt.track.id} 
                         className="flex items-center px-4 py-3 hover:bg-slate-900/60 border border-transparent hover:border-slate-800/40 transition-all group cursor-pointer"
                     >
                         <div className="w-8 flex items-center justify-center shrink-0 font-mono text-slate-500 text-s h-6">
@@ -106,7 +107,7 @@ export default function PlaylistTracksPage() {
                             <button 
                             onClick={(e) => {
                                 e.stopPropagation(); // Prevents the row click event from firing twice
-                                console.log("Play track:", track.id);
+                                console.log("Play track:", pt.track.id);
                             }}
                             className="hidden group-hover:flex items-center justify-center text-emerald-400 hover:text-emerald-300 hover:scale-110 transition-transform"
                             >
@@ -118,16 +119,22 @@ export default function PlaylistTracksPage() {
 
                         <div className="flex-1 pl-4 min-w-0">
                             <p className="font-semibold text-slate-200 group-hover:text-white truncate">
-                                {track.title}
+                                {pt.track.title}
                             </p>
                             <p className="text-sm text-slate-400 truncate sm:hidden">
-                                {track.artist}
+                                {pt.track.artist}
                             </p>
                         </div>
 
                         <div className="hidden sm:block w-48 pl-2 text-sm text-slate-400 group-hover:text-slate-300 truncate">
-                            {track.artist}
+                            {pt.track.artist}
                         </div>
+
+                        <div className="hidden sm:block w-48 pl-2 text-sm text-slate-400 group-hover:text-slate-300 truncate">
+                            {pt.addedAt 
+                                ? new Date(pt.addedAt).toLocaleDateString() 
+                                : 'Recently'}
+                            </div>
 
                         <div className="w-12 text-right text-sm font-medium text-slate-500 group-hover:text-slate-400">
                             3:45

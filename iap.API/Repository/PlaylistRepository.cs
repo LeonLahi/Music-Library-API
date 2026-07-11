@@ -134,7 +134,8 @@ namespace iap.API.Repository
       {
           PlaylistId = playlistId, 
           TrackId = trackId,
-          Order = maxOrder + 1 // Assign as latest track added
+          Order = maxOrder + 1, // Assign as latest track added
+          AddedAt = DateTimeOffset.Now
       });
 
       await _context.SaveChangesAsync();

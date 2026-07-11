@@ -285,6 +285,9 @@ namespace iap.API.Migrations
                     b.Property<int>("TrackId")
                         .HasColumnType("int");
 
+                    b.Property<DateTimeOffset>("AddedAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<int>("Order")
                         .HasColumnType("int");
 

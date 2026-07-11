@@ -21,7 +21,7 @@ namespace iap.API.Dtos
         public int? ParentId { get; set; }
         public int UserId { get; set; }
         public List<PlaylistDto>? Children { get; set; } = new List<PlaylistDto>();
-        public List<TrackDto> Tracks { get; set; } = new List<TrackDto>();
+        public List<PlaylistTrackDto> Tracks { get; set; } = new List<PlaylistTrackDto>();
 
     }
 }
