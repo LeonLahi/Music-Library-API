@@ -7,8 +7,12 @@ namespace iap.API.Data
 {
     public class IapDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
-        public IapDbContext(DbContextOptions<IapDbContext> options) : base(options)
+        private readonly ICurrentUserService _currentUser;
+
+        public IapDbContext(DbContextOptions<IapDbContext> options, ICurrentUserService currentUser)
+            : base(options)
         {
+            _currentUser = currentUser;
         }
 
         public DbSet<Track> Tracks { get; set; }
@@ -27,12 +31,12 @@ namespace iap.API.Data
             // Set the table name for the User entity to "Users" instead of default
             modelBuilder.Entity<User>().ToTable("Users");
 
-            // Filter out soft-deleted records
+            // Filter out soft-deleted records and any not belonging to the user
             modelBuilder.Entity<Playlist>()
-                .HasQueryFilter(p => !p.IsDeleted);
+                .HasQueryFilter(p => !p.IsDeleted && p.UserId == _currentUser.UserId);
 
             modelBuilder.Entity<Track>()
-                .HasQueryFilter(t => !t.IsDeleted);
+                .HasQueryFilter(t => !t.IsDeleted && t.UserId == _currentUser.UserId);
 
             // Composite primary keys for join tables
             modelBuilder.Entity<PlaylistTrack>()
