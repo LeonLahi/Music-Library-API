@@ -48,17 +48,17 @@ namespace iap.API.Services
             return Result<PlaylistDto>.Success(playlist.ToPlaylistDto());
         }
 
-        public async Task<Result<IEnumerable<PlaylistDto>>> GetAllDeletedAsync()
+        public async Task<Result<IEnumerable<PlaylistDto>>> GetAllDeletedAsync(int userId)
         {
-            var playlists = await _playlistRepository.GetAllDeletedAsync();
+            var playlists = await _playlistRepository.GetAllDeletedAsync(userId);
             var dtos = playlists.Select(p => p.ToPlaylistDto());
             
             return Result<IEnumerable<PlaylistDto>>.Success(dtos);
         }
 
-        public async Task<Result<PlaylistDto>> GetByIdDeletedAsync(int id)
+        public async Task<Result<PlaylistDto>> GetByIdDeletedAsync(int id, int userId)
         {
-            var playlist = await _playlistRepository.GetByIdDeletedAsync(id);
+            var playlist = await _playlistRepository.GetByIdDeletedAsync(id, userId);
 
             if (playlist is null)
                 return Result<PlaylistDto>.NotFound("Playlist not found");
@@ -89,7 +89,7 @@ namespace iap.API.Services
             if(string.IsNullOrWhiteSpace(playlistDto.Name))
             {
                 // Find latest default playlist name, add one to number in name to make unique
-                playlistDto.Name = await _playlistRepository.GetUniqueDefaultNameAsync();
+                playlistDto.Name = await _playlistRepository.GetUniqueDefaultNameAsync(userId);
             }
             else
             {
@@ -187,10 +187,10 @@ namespace iap.API.Services
 
         }
 
-        public async Task<Result<PlaylistDto>> UndoSoftDeletePlaylistAsync(int id)
+        public async Task<Result<PlaylistDto>> UndoSoftDeletePlaylistAsync(int id, int userId)
         {
             // Get deleted playlist from repo
-            var playlist = await _playlistRepository.GetByIdDeletedAsync(id);
+            var playlist = await _playlistRepository.GetByIdDeletedAsync(id, userId);
 
             if(playlist is null)
                 return Result<PlaylistDto>.NotFound("Playlist not found");

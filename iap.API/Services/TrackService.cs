@@ -45,17 +45,17 @@ namespace iap.API.Services
             return Result<TrackDto>.Success(track.ToTrackDto());
         }
 
-        public async Task<Result<IEnumerable<TrackDto>>> GetAllDeletedAsync()
+        public async Task<Result<IEnumerable<TrackDto>>> GetAllDeletedAsync(int userId)
         {
-            var tracks = await _trackRepository.GetAllDeletedAsync();
+            var tracks = await _trackRepository.GetAllDeletedAsync(userId);
             var dtos = tracks.Select(t => t.ToTrackDto());
             
             return Result<IEnumerable<TrackDto>>.Success(dtos);
         }
 
-        public async Task<Result<TrackDto>> GetByIdDeletedAsync(int id)
+        public async Task<Result<TrackDto>> GetByIdDeletedAsync(int id, int userId)
         {
-            var track = await _trackRepository.GetByIdDeletedAsync(id);
+            var track = await _trackRepository.GetByIdDeletedAsync(id, userId);
 
             if (track is null)
                 return Result<TrackDto>.NotFound("Track not found");
@@ -68,7 +68,7 @@ namespace iap.API.Services
 
             // Check for duplicate track name
             var existing = await _trackRepository
-                .GetByTitleAndUserAsync(trackDto.Title, userId);
+                .GetByTitleAsync(trackDto.Title);
 
             if (existing is not null)
                 return Result<TrackDto>.Conflict("Track with this title already exists");
@@ -125,10 +125,10 @@ namespace iap.API.Services
             
         }
 
-        public async Task<Result<TrackDto>> UndoSoftDeleteTrackAsync(int id)
+        public async Task<Result<TrackDto>> UndoSoftDeleteTrackAsync(int id, int userId)
         {
             // Get deleted track from repo
-            var track = await _trackRepository.GetByIdDeletedAsync(id);
+            var track = await _trackRepository.GetByIdDeletedAsync(id , userId);
 
             if(track is null)
                 return Result<TrackDto>.NotFound("Track not found");

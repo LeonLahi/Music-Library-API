@@ -13,10 +13,10 @@ namespace iap.API.Interfaces
         // Task<Track?> GetByIdAsync(int id); // ? as possible that id is not found so will return null
         // Task<Track> CreateAsync(Track trackModel);
         Task<bool> TrackExistsAsync(int id);
-        Task<Track?> GetByTitleAndUserAsync(string title, int userId);
+        Task<Track?> GetByTitleAsync(string title);
         Task<Track?> UpdateTrackAsync(int id, UpdateTrackRequestDto trackDto);
         Task<Track?> DeleteTrackAsync(Track track);
-        Task<List<Track>> GetAllDeletedAsync();
-        Task<Track?> GetByIdDeletedAsync(int id);
+        Task<List<Track>> GetAllDeletedAsync(int userId);
+        Task<Track?> GetByIdDeletedAsync(int id, int userId);
     }
 }

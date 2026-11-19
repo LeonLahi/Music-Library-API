@@ -60,7 +60,9 @@ namespace iap.API.Controllers
 
         public async Task<IActionResult> GetAllDeleted()
         {
-            var result = await _trackService.GetAllDeletedAsync();
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _trackService.GetAllDeletedAsync(userId);
 
             if (!result.IsSuccess)
                 return result.ToActionResult(this);
@@ -72,7 +74,9 @@ namespace iap.API.Controllers
 
         public async Task<IActionResult> GetByIdDeleted([FromRoute] int id)
         {
-            var result = await _trackService.GetByIdDeletedAsync(id);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _trackService.GetByIdDeletedAsync(id, userId);
 
             if (!result.IsSuccess)
                 return result.ToActionResult(this);
@@ -121,7 +125,9 @@ namespace iap.API.Controllers
         [HttpPost("{id}/restore")]
         public async Task<IActionResult> UndoSoftDeleteAsync([FromRoute] int id)
         {
-            var result = await _trackService.UndoSoftDeleteTrackAsync(id);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _trackService.UndoSoftDeleteTrackAsync(id, userId);
 
             if (!result.IsSuccess)
                 return result.ToActionResult(this);

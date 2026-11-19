@@ -14,12 +14,12 @@ namespace iap.API.Interfaces
         Task<Result<PlaylistDto>> DeleteTrackFromPlaylistAsync(int playlistId, int trackId);
         Task<Result<IEnumerable<PlaylistDto>>> GetAllAsync();
         Task<Result<PlaylistDto>> GetByIdAsync(int id);
-        Task<Result<IEnumerable<PlaylistDto>>> GetAllDeletedAsync();
-        Task<Result<PlaylistDto>> GetByIdDeletedAsync(int id);
+        Task<Result<IEnumerable<PlaylistDto>>> GetAllDeletedAsync(int userId);
+        Task<Result<PlaylistDto>> GetByIdDeletedAsync(int id, int userId);
         Task<Result<PlaylistDto>> CreateAsync(CreatePlaylistRequestDto playlistDto, int userId);
         Task<Result<PlaylistDto>> UpdateAsync(int id, UpdatePlaylistRequestDto playlistDto);
         Task<Result<PlaylistDto>> SoftDeletePlaylistAsync(int id);
-        Task<Result<PlaylistDto>> UndoSoftDeletePlaylistAsync(int id);
+        Task<Result<PlaylistDto>> UndoSoftDeletePlaylistAsync(int id, int userId);
         Task<Result<PlaylistDeleteImpactDto>> GetDeleteImpactAsync(int id);
         Task<Result<PlaylistDto>> AddTrackAsync(int playlistId, int trackId);
         Task<Result<PlaylistDto>> AddPlaylistToFolderAsync(int folderId, int playlistId);
