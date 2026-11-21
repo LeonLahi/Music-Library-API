@@ -8,13 +8,13 @@ Prerequisites:
 
 1 Start Docker Desktop
 
-2 Move to API folder
-
-```cd iap.API```
-
-3 Initialise database
+2 Initialise database
 
 ```docker compose up -d```
+
+3 Move to API folder
+
+```cd iap.API```
 
 4 Initialise user secrets and set the connection string (match the password in docker-compose.yml)
 
