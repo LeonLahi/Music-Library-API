@@ -42,13 +42,11 @@ namespace iap.API.Repository
 
     public virtual async Task<List<T>> GetAllAsync()
     {
-      // TODO: Set global query to filter out deleted records
       return await _context.Set<T>().ToListAsync();
     }
 
     public virtual async Task<T?> GetByIdAsync(int id)
     {
-      // TODO: Set global query to filter out deleted records
       return await _context.Set<T>().FindAsync(id);
     }
 

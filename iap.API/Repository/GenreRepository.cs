@@ -10,6 +10,7 @@ using iap.API.Dtos;
 
 namespace iap.API.Repository
 {
+  // TODO: Add genre features
   public class GenreRepository : AsyncRepository<Genre>, IGenreRepository
   {
     public GenreRepository(IapDbContext context) : base(context)

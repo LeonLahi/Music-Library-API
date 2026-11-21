@@ -77,7 +77,7 @@ namespace iap.API.Services
 
             var session = new ListeningSession
             {
-                UserId = userId, // TODO: Change to get userId from JWT token
+                UserId = userId,
                 PlayedAt = DateTimeOffset.Now,
                 SecondsListened = dto.SecondsListened,
                 TrackId = dto.TrackId

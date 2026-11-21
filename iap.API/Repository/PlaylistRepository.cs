@@ -85,7 +85,7 @@ namespace iap.API.Repository
     public async Task<string> GetUniqueDefaultNameAsync(int userId)
     {
       var defaultNames = await _context.Playlists
-                                .Where(p => p.UserId == userId && p.Name.StartsWith("New Collection"))
+                                .Where(p => p.Name.StartsWith("New Collection"))
                                 .Select(p => p.Name)
                                 .ToListAsync();
 
