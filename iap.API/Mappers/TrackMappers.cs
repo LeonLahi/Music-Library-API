@@ -34,6 +34,16 @@ namespace iap.API.Mappers
             };
         }
 
+        public static PlaylistTrackDto ToPlaylistTrackDto(this PlaylistTrack pt)
+        {
+            return new PlaylistTrackDto
+            {
+                Order = pt.Order,
+                AddedAt = pt.AddedAt,
+                Track = pt.Track.ToTrackDto()
+            };
+        }
+
         public static Track ToTrackFromCreateDto(this CreateTrackRequestDto dto)
         {
             return new Track

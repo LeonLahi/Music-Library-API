@@ -12,5 +12,6 @@ namespace iap.API.Models
        public int TrackId { get; set; }
        public Track Track  { get; set; } = null!;   
        public int Order { get; set; }
+       public DateTimeOffset AddedAt { get; set; }
     }
 }

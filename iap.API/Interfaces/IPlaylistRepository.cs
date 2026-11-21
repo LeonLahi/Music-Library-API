@@ -17,11 +17,11 @@ namespace iap.API.Interfaces
         // Task<Playlist?> DeleteAsync(Playlist playlist);
         Task<bool> GetByNameAsync(string name);
         // Task<bool> GetByLastDefaultNameAsync();
-        Task<string> GetUniqueDefaultNameAsync();
+        Task<string> GetUniqueDefaultNameAsync(int userId);
         Task<Playlist?> SoftDeletePlaylistAsync(Playlist playlist);
         Task<List<Playlist>> GetAllChildPlaylists(int ParentId);
         Task<int> GetActiveChildCount(int id);
-        Task<List<Playlist>> GetAllDeletedAsync();
-        Task<Playlist?> GetByIdDeletedAsync(int id);
+        Task<List<Playlist>> GetAllDeletedAsync(int userId);
+        Task<Playlist?> GetByIdDeletedAsync(int id, int userId);
     }
 }

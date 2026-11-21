@@ -19,7 +19,7 @@ namespace iap.API.Validators
         public static IRuleBuilderOptions<T, string> MustBeValidImage<T>(
             this IRuleBuilder<T, string> ruleBuilder)
         {
-            // Name playlist validation
+            // Image playlist validation
             return ruleBuilder
                 .Must(BeAValidUrl).WithMessage("Must be a valid link.")
                 .Must(BeAnImageUrl).WithMessage("Image URL must end with .jpg, .jpeg, .png or .webp");
@@ -28,7 +28,6 @@ namespace iap.API.Validators
         public static IRuleBuilderOptions<T, string> MustBeValidUrl<T>(
             this IRuleBuilder<T, string> ruleBuilder)
         {
-            // Name playlist validation
             return ruleBuilder
                 .Must(BeAValidUrl).WithMessage("Must be a valid link.");
         }

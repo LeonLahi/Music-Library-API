@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace iap.API.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
 
@@ -60,7 +60,9 @@ namespace iap.API.Controllers
 
         public async Task<IActionResult> GetAllDeleted()
         {
-            var result = await _playlistService.GetAllDeletedAsync();
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _playlistService.GetAllDeletedAsync(userId);
 
             if (!result.IsSuccess)
                 return result.ToActionResult(this);
@@ -72,7 +74,9 @@ namespace iap.API.Controllers
 
         public async Task<IActionResult> GetByIdDeleted([FromRoute] int id)
         {
-            var result = await _playlistService.GetByIdDeletedAsync(id);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _playlistService.GetByIdDeletedAsync(id, userId);
 
             if (!result.IsSuccess)
                 return result.ToActionResult(this);
@@ -132,7 +136,9 @@ namespace iap.API.Controllers
         [HttpPost("{id}/restore")]
         public async Task<IActionResult> UndoSoftDeleteAsync([FromRoute] int id)
         {
-            var result = await _playlistService.UndoSoftDeletePlaylistAsync(id);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _playlistService.UndoSoftDeletePlaylistAsync(id, userId);
 
             if (!result.IsSuccess)
                 return result.ToActionResult(this);

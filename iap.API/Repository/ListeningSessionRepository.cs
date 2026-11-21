@@ -32,7 +32,6 @@ namespace iap.API.Repository
     public async Task<List<ListeningSession>> GetRecentlyPlayedAsync(int limit = 20)
     {
         var sessions = await _context.ListeningSessions
-            .Where(ls => ls.UserId == 1) // TODO: Change to get userId from JWT token
             .Include(ls => ls.Track)
             .OrderByDescending(ls => ls.PlayedAt)
             .ToListAsync();

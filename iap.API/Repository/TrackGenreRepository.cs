@@ -10,6 +10,7 @@ using iap.API.Dtos;
 
 namespace iap.API.Repository
 {
+  // TODO: Assign genres to tracks
   public class TrackGenreRepository : AsyncRepository<TrackGenre>, ITrackGenreRepository
   {
     public TrackGenreRepository(IapDbContext context) : base(context)

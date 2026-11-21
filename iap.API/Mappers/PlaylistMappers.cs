@@ -28,7 +28,7 @@ namespace iap.API.Mappers
                 ? playlist.Children.Select(child => child.ToPlaylistDto()).ToList()
                 : new List<PlaylistDto>(),
                 UserId = playlist.UserId,
-                Tracks = playlist.PlaylistTracks.Select(pt => pt.Track.ToTrackDto()).ToList()
+                Tracks = playlist.PlaylistTracks.Select(pt => pt.ToPlaylistTrackDto()).ToList()
             };
         }
 

@@ -40,23 +40,25 @@ namespace iap.API.Repository
                                      .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<List<Playlist>> GetAllDeletedAsync()
+    public async Task<List<Playlist>> GetAllDeletedAsync(int userId)
     {
+      // IgnoreQueryFilters removes global filters so userId needs to be checked
       return await _context.Playlists.IgnoreQueryFilters()
                                      .Include(pt => pt.PlaylistTracks).ThenInclude(pt => pt.Track)
                                       // Fetch children playlist and each track
                                      .Include(c => c.Children).ThenInclude(c => c.PlaylistTracks).ThenInclude(ct => ct.Track)
-                                     .Where(p => p.IsDeleted)
+                                     .Where(p => p.IsDeleted && p.UserId == userId)
                                      .ToListAsync();
     }
 
-    public async Task<Playlist?> GetByIdDeletedAsync(int id)
+    public async Task<Playlist?> GetByIdDeletedAsync(int id, int userId)
     {
+      // IgnoreQueryFilters removes global filters so userId needs to be checked
       return await _context.Playlists.IgnoreQueryFilters()
                                      .Include(pt => pt.PlaylistTracks).ThenInclude(pt => pt.Track)
                                       // Fetch children playlist and each track
                                      .Include(c => c.Children).ThenInclude(c => c.PlaylistTracks).ThenInclude(ct => ct.Track)
-                                     .Where(p => p.IsDeleted)
+                                     .Where(p => p.IsDeleted && p.UserId == userId)
                                      .FirstOrDefaultAsync(p => p.Id == id);
     }
 
@@ -80,13 +82,10 @@ namespace iap.API.Repository
       return await _context.Playlists.AnyAsync(pt => pt.Name == name);
     }
 
-    public async Task<string> GetUniqueDefaultNameAsync()
+    public async Task<string> GetUniqueDefaultNameAsync(int userId)
     {
-      // TODO: Implement user login functionality and remove hardcoded user id
-      var tempUserId = 1;
-
       var defaultNames = await _context.Playlists
-                                .Where(p => p.UserId == tempUserId && p.Name.StartsWith("New Playlist"))
+                                .Where(p => p.Name.StartsWith("New Collection"))
                                 .Select(p => p.Name)
                                 .ToListAsync();
 
@@ -98,7 +97,7 @@ namespace iap.API.Repository
       int maxNumber = numbers.Any() ? numbers.Max() : 0; 
       int nextNumber = maxNumber + 1;
 
-      return $"New Playlist #{nextNumber}";
+      return $"New Collection #{nextNumber}";
     }
 
 
@@ -134,7 +133,8 @@ namespace iap.API.Repository
       {
           PlaylistId = playlistId, 
           TrackId = trackId,
-          Order = maxOrder + 1 // Assign as latest track added
+          Order = maxOrder + 1, // Assign as latest track added
+          AddedAt = DateTimeOffset.Now
       });
 
       await _context.SaveChangesAsync();

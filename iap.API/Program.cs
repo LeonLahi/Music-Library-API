@@ -96,6 +96,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Helper to fetch userId from current logged in user
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 // FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 

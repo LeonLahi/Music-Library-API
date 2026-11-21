@@ -13,11 +13,11 @@ namespace iap.API.Interfaces
     {
         Task<Result<IEnumerable<TrackDto>>> GetAllAsync();
         Task<Result<TrackDto>> GetByIdAsync(int id);
-        Task<Result<IEnumerable<TrackDto>>> GetAllDeletedAsync();
-        Task<Result<TrackDto>> GetByIdDeletedAsync(int id);
+        Task<Result<IEnumerable<TrackDto>>> GetAllDeletedAsync(int userId);
+        Task<Result<TrackDto>> GetByIdDeletedAsync(int id, int userId);
         Task<Result<TrackDto>> CreateAsync(CreateTrackRequestDto trackDto, int userId);
         Task<Result<TrackDto>> UpdateAsync(int id, UpdateTrackRequestDto updateDto);
         Task<Result<TrackDto>> SoftDeleteTrackAsync(int id);
-        Task<Result<TrackDto>> UndoSoftDeleteTrackAsync(int id);
+        Task<Result<TrackDto>> UndoSoftDeleteTrackAsync(int id, int userId);
     }
 }

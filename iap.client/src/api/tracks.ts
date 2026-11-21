@@ -1,7 +1,7 @@
-import client from './client'
+import { api } from './client';
 import { type Track } from '../types/api'
 
 export const getTracks = async (): Promise<Track[]> => {
-    const response = await client.get<Track[]>('/tracks')
+    const response = await api.get<Track[]>('/tracks')
     return response.data
 }

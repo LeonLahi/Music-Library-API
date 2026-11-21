@@ -4,8 +4,8 @@ export interface Track {
     artist: string | null
     albumName: string | null
     durationSeconds: number
-    blobUrl: string
     coverArtUrl: string | null
+    blobUrl: string
     uploadedAt: string
     updatedAt: string | null
     isDeleted: boolean
@@ -14,7 +14,13 @@ export interface Track {
     originalArtist: string | null
     originalAlbumName: string | null
     originalCoverArtUrl: string | null
-    // TODO: albumTrackNumber: number | null
+}
+
+export interface PlaylistTrack {
+    // trackId: number
+    order: number
+    addedAt: string
+    track: Track
 }
 
 export interface Playlist {
@@ -31,20 +37,6 @@ export interface Playlist {
     parentId: number | null
     tracks: PlaylistTrack[]
     user: User
-}
-
-export interface PlaylistTrack {
-    id: number
-    title: string
-    artist: string | null
-    albumName: string | null
-    durationSeconds: number
-    coverArtUrl: string | null
-    originalTitle: string | null
-    originalArtist: string | null
-    originalAlbumName: string | null
-    originalCoverArtUrl: string | null
-    order: number
 }
 
 export interface User {

@@ -33,26 +33,28 @@ namespace iap.API.Repository
       return await _context.Tracks.Include(t => t.TrackGenres).ThenInclude(tg => tg.Genre).FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    public async Task<List<Track>> GetAllDeletedAsync()
+    public async Task<List<Track>> GetAllDeletedAsync(int userId)
     {
+      // IgnoreQueryFilters removes global filters so userId needs to be checked
       return await _context.Tracks.IgnoreQueryFilters()
                                   .Include(t => t.TrackGenres).ThenInclude(tg => tg.Genre)
                                   .Include(c => c.Chapters)
-                                  .Where(p => p.IsDeleted)
+                                  .Where(p => p.IsDeleted && p.UserId == userId)
                                   .ToListAsync();
     }
 
-    public async Task<Track?> GetByIdDeletedAsync(int id)
+    public async Task<Track?> GetByIdDeletedAsync(int id, int userId)
     {
+      // IgnoreQueryFilters removes global filters so userId needs to be checked
       return await _context.Tracks.IgnoreQueryFilters()
                                   .Include(t => t.TrackGenres).ThenInclude(tg => tg.Genre)
-                                  .Where(p => p.IsDeleted)
+                                  .Where(p => p.IsDeleted && p.UserId == userId)
                                   .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<Track?> GetByTitleAndUserAsync(string title, int userId)
+    public async Task<Track?> GetByTitleAsync(string title)
     {
-        return await _context.Tracks.FirstOrDefaultAsync(t => t.Title == title && t.UserId == userId);
+        return await _context.Tracks.FirstOrDefaultAsync(t => t.Title == title);
     }
 
     public async Task<Track?> UpdateTrackAsync(int id, UpdateTrackRequestDto trackDto)
