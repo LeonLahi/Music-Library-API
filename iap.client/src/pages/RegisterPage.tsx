@@ -2,13 +2,15 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { register } from '../api/auth'
 import { useAuth } from '../context/AuthContext'
+import FieldError from '../components/FieldError'
 
 export default function RegisterPage() {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [displayName, setDisplayName] = useState('')
-    const [error, setError] = useState<string | null>(null)
+    const [error, setError] = useState('')
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({})
     const [loading, setLoading] = useState(false)
 
     const { loginUser } = useAuth()
@@ -17,14 +19,25 @@ export default function RegisterPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
-        setError(null)
+        setError('')
+        setFieldErrors({})
 
         try {
             const data = await register({ username, email, password, displayName })
             loginUser(data)
             navigate('/')
         } catch (err: any) {
-            setError(err.response?.data?.message ?? 'Registration failed.')
+            const data = err.response?.data
+            if (data?.errors) {
+                const mapped: Record<string, string[]> = {}
+                for (const [key, msgs] of Object.entries(data.errors)) {
+                    const field = key.charAt(0).toLowerCase() + key.slice(1)
+                    mapped[field] = msgs as string[]
+                }
+                setFieldErrors(mapped)
+            } else {
+                setError(data?.message ?? data?.title ?? 'Registration failed.')
+            }
         } finally {
             setLoading(false)
         }
@@ -38,7 +51,6 @@ export default function RegisterPage() {
                 {error && (
                     <p className="text-red-400 mb-4 text-sm">{error}</p>
                 )}
-
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="text-gray-400 text-sm block mb-1">
@@ -52,6 +64,7 @@ export default function RegisterPage() {
                                      focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         />
+                        <FieldError messages={fieldErrors.username} />
                     </div>
 
                     <div>
@@ -65,6 +78,7 @@ export default function RegisterPage() {
                             className="w-full bg-gray-700 text-white rounded px-3 py-2 
                                      focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
+                        <FieldError messages={fieldErrors.displayName} />
                     </div>
 
                     <div>
@@ -79,6 +93,7 @@ export default function RegisterPage() {
                                      focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         />
+                        <FieldError messages={fieldErrors.email} />
                     </div>
 
                     <div>
@@ -93,6 +108,7 @@ export default function RegisterPage() {
                                      focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         />
+                        <FieldError messages={fieldErrors.password} />
                     </div>
 
                     <button

@@ -51,3 +51,14 @@ export interface AuthResponse {
     displayName: string | null
     email: string
 }
+
+export interface ApiError {
+    message: string
+    statusCode: number
+    validationErrors?: Record<string, string[]>
+}
+
+export interface ApiResult<T> {
+    data: T | null
+    error: ApiError | null
+}

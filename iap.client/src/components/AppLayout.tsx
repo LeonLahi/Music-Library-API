@@ -18,10 +18,13 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { getPlaylists } from '../api/playlists'; 
 import { type Playlist } from '../types/api';
+import CreatePlaylistModal from './CreatePlaylistModal';
 
 export const AppLayout: React.FC = () => {
   const { logoutUser, user } = useAuth();
   const location = useLocation();
+  const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
@@ -88,10 +91,65 @@ export const AppLayout: React.FC = () => {
           {/* Section heading label */}
           <div className="flex items-center justify-between px-6 pt-4 pb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
             <span>Collections</span>
-            <button className="text-slate-500 hover:text-emerald-400 transition-colors p-1 rounded hover:bg-slate-800">
+
+            {/* Add collection button */}
+            <button 
+              onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
+              className={`text-slate-500 hover:text-emerald-400 transition-colors p-1 rounded hover:bg-slate-800 cursor-pointer ${
+              isAddMenuOpen ? 'text-emerald-400 bg-slate-800' : ''
+              }`}
+            >
+
               <Plus className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Add collection dropdown */}
+          {isAddMenuOpen && (
+            <>
+              {/* Closes when click outside menu */}
+              <div
+                className="fixed inset-0 z-40 cursor-defaukt"
+                onClick={() => setIsAddMenuOpen(false)}
+              />
+
+              {/* Dropdown menu */}
+              <div className="absolute right-0 mt-1 w-48 bg-slate-900 border border-slate-800 rounded-lg shadow-xl py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
+                <button 
+                  onClick={() => {
+                    setIsAddMenuOpen(false);
+                    console.log("Uploads tracks action");
+                  }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors text-left font-medium"    
+                >
+                <ListMusic className="w-4 h-4 text-slate-500" />
+                Upload Tracks
+                </button>
+                <button 
+                  onClick={() => {
+                    setIsAddMenuOpen(false)
+                    setIsCreateModalOpen(true);
+                    console.log("Create new playlist action");
+                  }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors text-left font-medium"    
+                >
+                <ListMusic className="w-4 h-4 text-slate-500" />
+                Create New Playlist
+                </button>
+                <button 
+                  onClick={() => {
+                    setIsAddMenuOpen(false);
+                    console.log("Create new folder action");
+                  }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors text-left font-medium"    
+                >
+                <ListMusic className="w-4 h-4 text-slate-500" />
+                Create New Folder
+                </button>
+
+              </div>
+            </>
+          )}
 
           {/* Scroll navigation body */}
           <nav className="flex-1 overflow-y-auto px-4 pb-4 space-y-0.5 scrollbar-thin">
@@ -216,6 +274,45 @@ export const AppLayout: React.FC = () => {
           <Outlet />
         </main>
       </div>
+
+      {/* ========================================== */}
+      {/* 🖼️ POP-UP MODAL ENGINE                     */}
+      {/* ========================================== */}
+      {isCreateModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          
+          {/* 1. Dark Blur Backdrop Shield */}
+          <div 
+            className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm cursor-default"
+            onClick={() => setIsCreateModalOpen(false)} // Close when clicking outside form canvas
+          />
+
+          {/* 2. Modal Card Frame Container */}
+          <div className="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xl z-10 animate-in fade-in zoom-in-95 duration-150">
+            
+            {/* Header row with a simple Cancel button */}
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-white">Create New Playlist</h3>
+              <button 
+                onClick={() => setIsCreateModalOpen(false)}
+                className="text-xs text-slate-400 hover:text-slate-200 cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+
+            {/* 3. Your Imported Form Component */}
+            <CreatePlaylistModal 
+              onCreated={(newPlaylist) => {
+                // 🎉 Success Callback Loop:
+                setPlaylists((prev) => [...prev, newPlaylist]); // Append to sidebar track layout instantly
+                setIsCreateModalOpen(false);                    // Close modal
+              }} 
+            />
+            
+          </div>
+        </div>
+      )}
 
     </div>
   );
