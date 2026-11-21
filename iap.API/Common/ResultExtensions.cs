@@ -4,7 +4,7 @@ namespace iap.API.Common
 {
     public static class ResultExtensions
     {
-        // For Result<T> — operations that return data
+        // Operations that return data
         public static IActionResult ToActionResult<T>(
             this Result<T> result, ControllerBase controller)
         {
@@ -28,7 +28,7 @@ namespace iap.API.Common
             };
         }
 
-        // For Result — operations that dont return data (delete etc)
+        // Operations that dont return data (delete etc)
         public static IActionResult ToActionResult(
             this Result result, ControllerBase controller)
         {

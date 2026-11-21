@@ -27,7 +27,14 @@ namespace iap.API.Filters
                     if (!result.IsValid)
                     {
                         // If invalid, stop the request and return the errors
-                        context.Result = new BadRequestObjectResult(result.Errors);
+                        var errors = result.Errors
+                            .GroupBy(e => e.PropertyName)
+                            .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+
+                        context.Result = new BadRequestObjectResult(new ValidationProblemDetails(errors)
+                        {
+                            Status = StatusCodes.Status400BadRequest
+                        });
                         return;
                     }
                 }
