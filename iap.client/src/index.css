@@ -1,8 +1,0 @@
-@import "tailwindcss";
-
-/* Apply to all buttons */
-@layer base {
-  button {
-    @apply cursor-pointer;
-  }
-}
