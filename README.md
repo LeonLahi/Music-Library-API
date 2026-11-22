@@ -43,9 +43,11 @@ Requires the EF Core CLI. If you don't have it, install it once:
 
 9 Register an account (or log in if you already have one), then paste the token into the Authorize button in Swagger.
 
-10 Create tracks and playlists
+**Note:** Playlist types are currently entered as numbers: 0 = Album, Mix = 1, Playlist = 2, Folder = 3. Required fields are not marked in Swagger yet, but the API validates and returns a message saying what's missing or invalid.
 
-11 Create listening sessions from tracks and playlists, then fetch listening stats.
+10 Create tracks and playlists 
+
+11 Create listening sessions from tracks and playlists
 
 ## Status
 **Complete**
@@ -59,7 +61,7 @@ Requires the EF Core CLI. If you don't have it, install it once:
 - Creating default playlist when user registers
 - Seeding and applying genres to tracks
 - Playback and logging listening sessions
-- Extra listening stats
+- Creating a variety of listening statistics
 - React user interface
 - User account management
 
@@ -82,7 +84,9 @@ Requires the EF Core CLI. If you don't have it, install it once:
 ### Data Model
 **Tracks** store two seperate sets of track details. One set is the original details which are nullable columns that will store metadata seeded from a third-party database if available. The second set is given by the user, which allows for custom details to be added and will display the original in the user interface if both are available. The track file is stored as a URL linking to the file itself. This could be a path to a local file on the user's system or be linked from cloud storage, for example. 
 
-**Playlists** are various types of track collections (e.g. album, playlist) that are defined using an enum. The type *Folder* uses validation to only allow other playlists to be stored inside it, and each child playlist contains a *ParentId* field referencing the folder. Each playlist contains an *IsDefault* field, which will be used in the future for creating a default playlist when the user registers. This will simplify the structure of data by keeping every track organised into a collection for displaying in the user interface. Instead of a class property, it may be better to create a new playlist type of *Default* as there will only ever be one occasion where *IsDefault* is true, making it redundant to store for every playlist. 
+**Playlists** are various types of track collections (e.g. album, mix) that are defined using an enum. The type *Folder* uses validation to only allow other playlists to be stored inside it, and each child playlist contains a *ParentId* field referencing the folder. Each playlist contains an *IsDefault* field, which will be used in the future for creating a default playlist when the user registers. This will simplify the structure of data by keeping every track organised into a collection for displaying in the user interface. Instead of a class property, it may be better to create a new playlist type of *Default* as there will only ever be one occasion where *IsDefault* is true, making it redundant to store for every playlist. 
+
+**Listening Sessions** are records that log each time a user listens to a track, including when and for how long. LINQ queries are used to sort this data, with aggregated statistics (such as favourite artists, favourite albums and recently played) planned. Sessions are currently created manually through Swagger, but the aim is for them to be created automatically by audio playback, with the statistics shown in the user interface.
 
 ### Request Handling
 The **FluentValidation** library is used to check user input and return appropriate error messages for bad data before any logic is executed. Each DTO has a validator class (inheriting AbstractValidator) that runs through a filter before the controller executes. Validation rules can be chained, and custom rules can be added for specific needs, such as checking that a URL is valid and points to a supported file format.
