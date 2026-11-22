@@ -1,5 +1,7 @@
 # Music Library Manager
 
+A RESTful API for managing a personal music library, including tracks, playlists and listening statistics. I built it to learn ASP.NET Core, and as a way for me to play and manage my music locally, with custom stats and a custom user interface. The core API (tracks, playlists, user auth) is working. Playback and the React UI (on the `ui` branch) are in progress, see Status below.
+
 ## Getting Started 
 
 Prerequisites:
@@ -8,35 +10,42 @@ Prerequisites:
 
 1 Start Docker Desktop
 
-2 Initialise database
+2 Start the database (wait a few seconds for it to finish starting)
 
-```docker compose up -d```
+`docker compose up -d`
 
 3 Move to API folder
 
-```cd iap.API```
+`cd iap.API`
 
 4 Initialise user secrets and set the connection string (match the password in docker-compose.yml)
 
-```dotnet user-secrets init```
+`dotnet user-secrets init`
 
-```dotnet user-secrets set "ConnectionStrings:DefaultConnection" 'Server=localhost,1434;Database=IapDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True'``` 
+`dotnet user-secrets set "ConnectionStrings:DefaultConnection" 'Server=localhost,1434;Database=IapDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True'`
 
 5 Create a key for generating auth tokens
 
-```dotnet user-secrets set "JwtSettings:SecretKey" "<your-own-random-string-at-least-32-characters>"```
+`dotnet user-secrets set "JwtSettings:SecretKey" "<your-own-random-string-at-least-32-characters>"`
 
-6 Start the API
+6 Build the database schema 
 
-```dotnet watch run```
+Requires the EF Core CLI. If you don't have it, install it once:
+`dotnet tool install --global dotnet-ef`
 
-7 Open `https://localhost:<port>/swagger`
+`dotnet ef database update`
 
-8 Register an account (or log in if you already have one), then paste the token into the Authorize button in Swagger.
+7 Start the API
 
-9 Create tracks and playlists
+`dotnet watch run`
 
-10 Create listening sessions from tracks and playlists, then fetch listening stats.
+8 Open `https://localhost:<port>/swagger`
+
+9 Register an account (or log in if you already have one), then paste the token into the Authorize button in Swagger.
+
+10 Create tracks and playlists
+
+11 Create listening sessions from tracks and playlists, then fetch listening stats.
 
 ## Status
 **Complete**
