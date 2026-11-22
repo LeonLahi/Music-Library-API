@@ -54,7 +54,8 @@ Requires the EF Core CLI. If you don't have it, install it once:
 - User auth
 
 **Work in Progress**
-- Dealing with all edge cases
+- Improve Swagger usability (enum names, documentation, required fields)
+- Handling all edge cases
 - Creating default playlist when user registers
 - Seeding and applying genres to tracks
 - Playback and logging listening sessions
